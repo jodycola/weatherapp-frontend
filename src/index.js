@@ -1,5 +1,5 @@
 //url section
-const railsData = 'localhost:3000/users'
+const railsData = 'http://localhost:3000/users'
 const weatherUrl = ''
 const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?zip='
 
@@ -10,24 +10,44 @@ const homeWeather = document.querySelector('.detail-image')
 const homeLocation = document.querySelector('.title')
 
 //fetch functions
+const getUser = _ => {
+    fetch(railsData + '/1')
+        .then(res => res.json())
+        .then(dataArr => {
+            dataArr.favorites.forEach(favorite => {
+                getWeatherForLocation(favorite.location.zip)
+            })
+        })
+}
+
+getUser()
+
 const getLocation = event => {
     event.preventDefault()
+    const userId = event.target.dataset.id
     const zip = event.target.location.value
 
     // createHomeLocationForUser(zip)
     getWeatherForLocation(zip)
 }
 
+
 const getWeatherForLocation = zip => {
     fetch(baseUrl + `${zip}` + "&units=imperial&appid=a676cbe359f328eaead7426bb2fac895")
         .then(res => res.json())
-        .then(data => renderHomeWeather(data))
+        .then(data => createNewFavorite(data))
 }
 
 //display functions
 
-const renderHomeWeather = weather => {
-    homeLocation.innerText = weather.name
+const createNewFavorite = weather => {
+    const span = document.createElement('span')
+    const h5 = document.createElement('h5')
+    h5.innerText = weather.name
+    span.innerText = weather.main.temp
+    // const favBtn
+    span.append(h5)
+    favoriteDiv.append(span)
 }
 
 
