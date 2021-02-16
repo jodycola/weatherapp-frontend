@@ -17,7 +17,7 @@ const getUser = _ => {
         .then(res => res.json())
         .then(dataArr => {
             dataArr.favorites.forEach(favorite => {
-                getWeatherForLocation(favorite.zip)
+                getWeatherForLocation(favorite.zip, favorite.id)
             })
         })
         form.dataset.id = userID
@@ -38,29 +38,42 @@ const getLocation = event => {
         body: JSON.stringify(newFavorite)
     }
 
-    fetch(favoritesData, configObj)
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-    })
-
-
+        return fetch(favoritesData, configObj)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.id)
+            getWeatherForLocation(data.zip, data.id)
+        })
     // createHomeLocationForUser(zip)
-    getWeatherForLocation(zip)
+    
 }
 
+const handleClick = event => {
+    const deleteId = event.target.closest(".delete-box").dataset.id
+    fetch(favoritesData + '/' + deleteId, {
+        method: "DELETE",
+    })
+    .then(res => res.json())
 
-const getWeatherForLocation = zip => {
+    Array.from(favoriteDiv.children).forEach(child => child.remove())
+    getUser()
+
+}
+
+const getWeatherForLocation = (zip, id) => {
+    const ID = id
     fetch(baseUrl + `${zip}` + "&units=imperial&appid=a676cbe359f328eaead7426bb2fac895")
         .then(res => res.json())
-        .then(data => createNewFavorite(data))
+        .then(data => createNewFavorite(data, ID))
 }
 
 //display functions
 
-const createNewFavorite = weather => {
+const createNewFavorite = (weather, id) => {
     const favoriteCard = document.createElement('div')
     favoriteCard.className = "weather-card"
+    favoriteCard.dataset.id = id
+    favoriteCard.style.zIndex = "0"
 
     const favoriteIcon = document.createElement('div')
     favoriteIcon.className = "weather-icon sun"
@@ -71,32 +84,25 @@ const createNewFavorite = weather => {
     const p = document.createElement('p')
     p.innerText = weather.name
 
-    favoriteCard.append(p, h1, favoriteIcon)
+    const deleteDiv = document.createElement('div')
+    deleteDiv.className = "delete-box"
+    deleteDiv.dataset.id = id
+
+    const boxLeft = document.createElement('div')
+    boxLeft.className = 'box-left'
+
+    const fa = document.createElement("i")
+    fa.className = "but-icon fa fa-lg fa-times"
+
+    boxLeft.append(fa)
+    deleteDiv.append(boxLeft)
+    favoriteCard.append(p, h1, favoriteIcon, deleteDiv)
     favoriteDiv.append(favoriteCard)
+
+    deleteDiv.addEventListener('click', handleClick)
+
 }
-
-
-// const getUsers = _ => {
-//     fetch ('http://localhost:3000/users')
-//     .then(res => res.json())
-//     .then(userArr => userArr.forEach(user => {
-//         showName(user)
-//     }))
-// }
-
-// const showName = user => {
-//     const name = document.createElement("div")
-//     const h2 = document.createElement('h2')
-//     h2.innerText = `${user.name}`
-
-//     name.append(h2)
-//     document.body.append(name)
-// }
-
-
-// getCurrentLocation()
-// getWeatherForLocation(location)
-// getUsers()
 
 //event listeners
 form.addEventListener("submit", getLocation)
+
