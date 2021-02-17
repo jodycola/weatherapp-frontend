@@ -18,24 +18,42 @@
     <div class="weather-wrapper">
 
     </div>
+
+    <hr />
+    <!-- Home Location Weather / Radar -->
+    <h4>Weather Details</h4>
+    <div class="detail-weather">
+      <div class="detailed-weather-wrapper" width="500px"> 
+        <div class="detailed-weather-card" width="500px">
+        <h1 class="detail"> City Name</h1>
+        <h2 class="details"><pre>
+        Weather Temp
+        Feels Like
+        Description<pre></h2>
+        </div>
+      </div>
+    </div>
+    
     <hr />
     <!---Location Form-->
     <form id="location-form" data-id="insert user ID">
-      <h4>Select Home Location</h4>
+      <h4>Select Location</h4>
         <label for="location">Location:</label>
-        <input type="text" id="location-input" name="location">
+        <input type="text" id="location-input" name="location" placeholder="Enter zipcode">
         <input type="submit">
     </form>
 
     <hr />
 
-    <!-- Spice Blend Update Form -->
+
+
     <form id="update-form" data-id="insert spiceblend ID" autocomplete="off">
-      <h4>Edit Spice Blend</h4>
       <label for="title">New Title: </label>
       <input type="text" name="title" id="spiceblend-title" />
       <input type="submit" value="Update" />  
     </form>
+
+    <hr />
 
     <!-- New Ingredient Form -->
     <form id="ingredient-form" data-id="insert spiceblend ID" autocomplete="off">

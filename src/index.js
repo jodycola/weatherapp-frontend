@@ -3,6 +3,8 @@ const usersData = 'http://localhost:3000/users'
 const favoritesData = 'http://localhost:3000/favorites'
 const weatherUrl = ''
 const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?zip='
+const key = 'appid=a676cbe359f328eaead7426bb2fac895'
+
 
 //document elements
 const form = document.querySelector("#location-form")
@@ -41,14 +43,13 @@ const getLocation = event => {
         return fetch(favoritesData, configObj)
         .then(res => res.json())
         .then(data => {
-            console.log(data.id)
             getWeatherForLocation(data.zip, data.id)
         })
     // createHomeLocationForUser(zip)
     
 }
 
-const handleClick = event => {
+const deleteLocation = event => {
     const deleteId = event.target.closest(".delete-box").dataset.id
     fetch(favoritesData + '/' + deleteId, {
         method: "DELETE",
@@ -62,22 +63,36 @@ const handleClick = event => {
 
 const getWeatherForLocation = (zip, id) => {
     const ID = id
-    fetch(baseUrl + `${zip}` + "&units=imperial&appid=a676cbe359f328eaead7426bb2fac895")
+    fetch(baseUrl + `${zip}` + "&units=imperial&" + key)
         .then(res => res.json())
         .then(data => createNewFavorite(data, ID))
 }
 
+const detailWeather = _ => {
+    console.log(event.target.closest("div"))
+    weatherDetails
+    // obtain weather details from openweatherapi
+        // fetch get favoritedata with id
+        // save zip to variable
+        // fetch openweather with zip
+        // parse data fill out 
+    // fill OUT DOM
+
+}
 //display functions
 
 const createNewFavorite = (weather, id) => {
     const favoriteCard = document.createElement('div')
     favoriteCard.className = "weather-card"
     favoriteCard.dataset.id = id
-    favoriteCard.style.zIndex = "0"
 
     const favoriteIcon = document.createElement('div')
+    if (weather.weather[0].main === 'Clear') {
     favoriteIcon.className = "weather-icon sun"
-    
+    } else {
+    favoriteIcon.className = "weather-icon cloud"
+    }
+
     const h1 = document.createElement('h1')
     h1.innerText = Math.round(weather.main.temp) + '°'
 
@@ -99,10 +114,12 @@ const createNewFavorite = (weather, id) => {
     favoriteCard.append(p, h1, favoriteIcon, deleteDiv)
     favoriteDiv.append(favoriteCard)
 
-    deleteDiv.addEventListener('click', handleClick)
-
+    deleteDiv.addEventListener('click', deleteLocation)
 }
 
 //event listeners
 form.addEventListener("submit", getLocation)
+favoriteDiv.addEventListener("click", detailWeather)
 
+// testiing google maps
+const googleKey = 'AIzaSyDbomeIPzvVSlX_5YR9hSPOofDQpHUvcZE'
