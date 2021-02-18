@@ -1,13 +1,12 @@
-//url section
+/////// URL SECTION ///////
 const usersData = 'http://localhost:3000/users'
 const favoritesData = 'http://localhost:3000/favorites'
-const weatherUrl = ''
 const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?zip='
-const cityUrl = 'api.openweathermap.org/data/2.5/weather?q='
+const cityUrl = 'http://api.openweathermap.org/data/2.5/weather?q='
 const key = 'appid=a676cbe359f328eaead7426bb2fac895'
 
 
-//document elements
+/////// DOCUMENT ELEMENTS ///////
 const form = document.querySelector("#location-form")
 const favoriteDiv = document.querySelector('div.weather-wrapper')
 const homeWeather = document.querySelector('.detail-image')
@@ -20,9 +19,14 @@ const detailedIcon = document.querySelector(".detailed-weather-icon")
 const detailedTemp = document.querySelector(".detail-temp")
 const userID = 1
 
-//fetch functions
+
 // Create a users route that checks for exsiting users
 // or creates a new user in db
+// Valdation for new users
+
+// Valadation for multiple favorite locations
+
+// 5 day forecast
 
 // City name search should work as well
 
@@ -39,6 +43,16 @@ const userID = 1
 // Accordian slider?
 // https://accordionslider.com/
 
+/////// FETCH FUNCTIONS ///////
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8,
+      });
+  }
+
+
 const getUser = _ => {
     fetch(usersData + '/1')
         .then(res => res.json())
@@ -54,24 +68,46 @@ getUser()
 
 const getLocation = event => {
     event.preventDefault()
-
     const user_id = event.target.dataset.id
-    const zip = event.target.location.value
+    const result = event.target.location.value
 
-    const newFavorite = {user_id, zip}
-
-    configObj = {
-        method: "POST",
-        headers: { "Content-type":"application/json" },
-        body: JSON.stringify(newFavorite)
+    if (isNumeric(result)){
+        fetch(baseUrl + `${result}` + "&units=imperial&" + key)
+            .then(res => res.json())
+            .then(data => createLocationObj(data.name, user_id))
+    }
+    else {
+        fetch(cityUrl + `${result}` + "&units=imperial&" + key)
+            .then(res => res.json())
+            .then(data => createLocationObj(data.name, user_id))
     }
 
-        return fetch(favoritesData, configObj)
-        .then(res => res.json())
-        .then(data => {
-            getWeatherForLocation(data.zip, data.id)
-        })
+    // const zip = event.target.location.value
+
+    // const newFavorite = {user_id, zip}
+
+    // configObj = {
+    //     method: "POST",
+    //     headers: { "Content-type":"application/json" },
+    //     body: JSON.stringify(newFavorite)
+    // }
+
+    //     return fetch(favoritesData, configObj)
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         getWeatherForLocation(data.zip, data.id)
+    //     })
     
+}
+
+const createLocationObj = (city, user_id) => {
+    fetch(favoritesData, {
+        method: 'POST',
+        headers: {'Content-type': 'application/json'},
+        body: JSON.stringify({city, user_id})
+    })
+        .then(res => res.json())
+        .then(data => {getWeatherForLocation(data.name, data.id)})
 }
 
 const deleteLocation = event => {
@@ -90,12 +126,11 @@ const deleteLocation = event => {
     detailedTemp.innerText = ""
     detailedDetails.innerHTML = ""
 
-
 }
 
-const getWeatherForLocation = (zip, id) => {
+const getWeatherForLocation = (city, id) => {
     const ID = id
-    fetch(baseUrl + `${zip}` + "&units=imperial&" + key)
+    fetch(cityUrl + `${city}` + "&units=imperial&" + key)
         .then(res => res.json())
         .then(data => createNewFavorite(data, ID))
 }
@@ -115,7 +150,7 @@ const fetchWeatherData = (zip, id) => {
         .then(data => createWeatherDetails(data, ID))
 }
 
-//display functions
+/////// DOM FUNCTIONS ///////
 const createWeatherDetails = (weather, id) => {
     // Logic to change temp color based off temp number
 
@@ -180,20 +215,18 @@ const createNewFavorite = (weather, id) => {
     deleteDiv.addEventListener('click', deleteLocation)
 }
 
-//event listeners
+/////// EVENT LISTENERS ///////
 form.addEventListener("submit", getLocation)
 favoriteDiv.addEventListener("click", showWeather)
 
-// testiing google maps
+
+/////// HELPER FUNCTIONS ///////
+function isNumeric(str) {
+    if (typeof str != "string") return false 
+    return !isNaN(str) &&
+           !isNaN(parseFloat(str))
+  }
+  
+// testing google maps
 const googleKey = 'AIzaSyDbomeIPzvVSlX_5YR9hSPOofDQpHUvcZE'
 
-let map;
-
-const initMap = _ => {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644},
-    zoom: 8,
-  });
-}
-
-initMap()
