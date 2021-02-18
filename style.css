@@ -221,6 +221,19 @@
       box-shadow: rgba(255, 255, 0, 0.2) 0 0 0 17px;
    }
  }
+  .cloudy {
+    margin-right: 60px;
+    background: #b6cede;
+    border-radius: 20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: #b6cede 24px -6px 0 2px, #b6cede 10px 5px 0 5px, #b6cede 30px 5px 0 2px, #b6cede 11px -8px 0 -3px, #b6cede 25px 11px 0 -1px;
+ }
+ @keyframes weather-icon-move {
+  50% {
+    transform: translateY(-8px);
+ }
+}
   .cloud {
     margin-right: 60px;
     background: #b6cede;

@@ -22,17 +22,13 @@
     <hr />
     <!-- Home Location Weather / Radar -->
     <h4>Weather Details</h4>
-    <div class="detail-weather">
-      <div class="detailed-weather-wrapper" width="500px"> 
-        <div class="detailed-weather-card" width="500px">
-        <h1 class="detail"> City Name</h1>
-        <h2 class="details"><pre>
-        Weather Temp
-        Feels Like
-        Description<pre></h2>
+      <div class="detailed-weather-wrapper"> 
+        <div class="detailed-weather-card">
+        <h1 class="detail"></h1>
+        <h2 class="details"></h2>
+        <!-- <img src="https://maps.googleapis.com/maps/api/js?key=appid=a676cbe359f328eaead7426bb2fac895&callback=initMap"> -->
         </div>
       </div>
-    </div>
     
     <hr />
     <!---Location Form-->
@@ -44,6 +40,14 @@
     </form>
 
     <hr />
+
+    <div id="map"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv8guHW3zw8EESTOipg1JqzyN5oA6BsYM&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
 
 
 

@@ -11,6 +11,9 @@ const form = document.querySelector("#location-form")
 const favoriteDiv = document.querySelector('div.weather-wrapper')
 const homeWeather = document.querySelector('.detail-image')
 const homeLocation = document.querySelector('.title')
+const detailedDiv = document.querySelector(".detailed-weather-card")
+const detailedDivName = document.querySelector(".detail")
+const detailedDivDetails = document.querySelector(".details")
 const userID = 1
 
 //fetch functions
@@ -28,6 +31,7 @@ const getUser = _ => {
 getUser()
 
 const getLocation = event => {
+    
     event.preventDefault()
     const user_id = event.target.dataset.id
     const zip = event.target.location.value
@@ -45,7 +49,6 @@ const getLocation = event => {
         .then(data => {
             getWeatherForLocation(data.zip, data.id)
         })
-    // createHomeLocationForUser(zip)
     
 }
 
@@ -68,18 +71,32 @@ const getWeatherForLocation = (zip, id) => {
         .then(data => createNewFavorite(data, ID))
 }
 
-const detailWeather = _ => {
-    console.log(event.target.closest("div"))
-    weatherDetails
-    // obtain weather details from openweatherapi
-        // fetch get favoritedata with id
-        // save zip to variable
-        // fetch openweather with zip
-        // parse data fill out 
-    // fill OUT DOM
+const showWeather = _ => {
+    weather_id = event.target.closest("div").dataset.id
 
+        fetch(favoritesData + '/' + weather_id)
+            .then(res => res.json())
+            .then(data => fetchWeatherData(data.zip, weather_id))    
 }
+
+const fetchWeatherData = (zip, id) => {
+    const ID = id
+    fetch(baseUrl + `${zip}` + "&units=imperial&" + key)
+        .then(res => res.json())
+        .then(data => createWeatherDetails(data, ID))
+}
+
 //display functions
+const createWeatherDetails = (weather, id) => {
+    detailedDiv.dataset.id = id
+    detailedDivName.innerText = weather.name
+    detailedDivDetails.innerHTML = `<pre>
+    The temperture is ${Math.round(weather.main.temp)}°
+    The temperture feels like ${Math.round(weather.main.feels_like)}°
+    ${weather.weather[0].main} with ${weather.weather[0].description}
+    The wind speed is ${weather.wind.speed} mph
+    `
+}
 
 const createNewFavorite = (weather, id) => {
     const favoriteCard = document.createElement('div')
@@ -87,10 +104,14 @@ const createNewFavorite = (weather, id) => {
     favoriteCard.dataset.id = id
 
     const favoriteIcon = document.createElement('div')
-    if (weather.weather[0].main === 'Clear') {
-    favoriteIcon.className = "weather-icon sun"
-    } else {
-    favoriteIcon.className = "weather-icon cloud"
+    if (weather.weather[0].description.includes("clear")) {
+        favoriteIcon.className = "weather-icon sun"
+    }
+    else if (weather.weather[0].description.includes("clouds")) {
+        favoriteIcon.className = "weather-icon cloudy"
+    }
+    else {
+        favoriteIcon.className = "weather-icon cloud"
     }
 
     const h1 = document.createElement('h1')
@@ -119,7 +140,18 @@ const createNewFavorite = (weather, id) => {
 
 //event listeners
 form.addEventListener("submit", getLocation)
-favoriteDiv.addEventListener("click", detailWeather)
+favoriteDiv.addEventListener("click", showWeather)
 
 // testiing google maps
 const googleKey = 'AIzaSyDbomeIPzvVSlX_5YR9hSPOofDQpHUvcZE'
+
+let map;
+
+const initMap = _ => {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -34.397, lng: 150.644},
+    zoom: 8,
+  });
+}
+
+initMap()
