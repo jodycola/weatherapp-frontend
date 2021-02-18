@@ -3,6 +3,7 @@ const usersData = 'http://localhost:3000/users'
 const favoritesData = 'http://localhost:3000/favorites'
 const weatherUrl = ''
 const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?zip='
+const cityUrl = 'api.openweathermap.org/data/2.5/weather?q='
 const key = 'appid=a676cbe359f328eaead7426bb2fac895'
 
 
@@ -11,12 +12,33 @@ const form = document.querySelector("#location-form")
 const favoriteDiv = document.querySelector('div.weather-wrapper')
 const homeWeather = document.querySelector('.detail-image')
 const homeLocation = document.querySelector('.title')
-const detailedDiv = document.querySelector(".detailed-weather-card")
-const detailedDivName = document.querySelector(".detail")
-const detailedDivDetails = document.querySelector(".details")
+const detailedWrapper = document.querySelector(".detailed-weather-wrapper")
+const detailedCard = document.querySelector(".detailed-weather-card")
+const detailedName = document.querySelector(".detail")
+const detailedDetails = document.querySelector(".details")
+const detailedIcon = document.querySelector(".detailed-weather-icon")
+const detailedTemp = document.querySelector(".detail-temp")
 const userID = 1
 
 //fetch functions
+// Create a users route that checks for exsiting users
+// or creates a new user in db
+
+// City name search should work as well
+
+// Make app look pretty in CSS
+// font color conditionals depending on temp
+
+// Work on radar
+
+// Delete button double click?
+// Deletes may be happing optimistically
+
+// Seed more data for "John"
+
+// Accordian slider?
+// https://accordionslider.com/
+
 const getUser = _ => {
     fetch(usersData + '/1')
         .then(res => res.json())
@@ -31,8 +53,8 @@ const getUser = _ => {
 getUser()
 
 const getLocation = event => {
-    
     event.preventDefault()
+
     const user_id = event.target.dataset.id
     const zip = event.target.location.value
 
@@ -61,6 +83,13 @@ const deleteLocation = event => {
 
     Array.from(favoriteDiv.children).forEach(child => child.remove())
     getUser()
+    
+    detailedCard.dataset.id = ""
+    detailedIcon.className = "detailed-weather-icon"
+    detailedName.innerText = ""
+    detailedTemp.innerText = ""
+    detailedDetails.innerHTML = ""
+
 
 }
 
@@ -88,13 +117,26 @@ const fetchWeatherData = (zip, id) => {
 
 //display functions
 const createWeatherDetails = (weather, id) => {
-    detailedDiv.dataset.id = id
-    detailedDivName.innerText = weather.name
-    detailedDivDetails.innerHTML = `<pre>
-    The temperture is ${Math.round(weather.main.temp)}°
+    // Logic to change temp color based off temp number
+
+    detailedCard.dataset.id = id
+
+    if (weather.weather[0].description.includes("clear")) {
+        detailedIcon.className = "detailed-weather-icon sun"
+    }
+    else if (weather.weather[0].description.includes("clouds")) {
+        detailedIcon.className = "detailed-weather-icon cloudy"
+    }
+    else {
+        detailedIcon.className = "detailed-weather-icon cloud"
+    }
+
+    detailedName.innerText = weather.name
+    detailedTemp.innerText = `${Math.round(weather.main.temp)}°`
+    detailedDetails.innerHTML = `<pre>
     The temperture feels like ${Math.round(weather.main.feels_like)}°
-    ${weather.weather[0].main} with ${weather.weather[0].description}
-    The wind speed is ${weather.wind.speed} mph
+    Description: ${weather.weather[0].main} / ${weather.weather[0].description}
+    The wind speed is currently ${weather.wind.speed} mph
     `
 }
 

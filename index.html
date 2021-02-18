@@ -12,34 +12,33 @@
 
   <body>
     <header>
-      <h3>Weather App</h3>
+      <h3>The Weather App</h3>
     </header>
 
     <div class="weather-wrapper">
 
     </div>
 
-    <hr />
     <!-- Home Location Weather / Radar -->
     <h4>Weather Details</h4>
       <div class="detailed-weather-wrapper"> 
         <div class="detailed-weather-card">
-        <h1 class="detail"></h1>
+          <div class="detailed-weather-icon"></div>
+          <h1 class="detail"></h1>
         <h2 class="details"></h2>
+        <h3 class="detail-temp"></h3>
         <!-- <img src="https://maps.googleapis.com/maps/api/js?key=appid=a676cbe359f328eaead7426bb2fac895&callback=initMap"> -->
         </div>
       </div>
     
-    <hr />
     <!---Location Form-->
+    <h4>Select Location</h4>
     <form id="location-form" data-id="insert user ID">
-      <h4>Select Location</h4>
-        <label for="location">Location:</label>
-        <input type="text" id="location-input" name="location" placeholder="Enter zipcode">
-        <input type="submit">
+        <label for="location">Find the weather</label>
+        <input type="text" id="location-input" name="location" placeholder="Enter zipcode" required>
+        <button type="submit">Search</button>
     </form>
 
-    <hr />
 
     <div id="map"></div>
 
@@ -48,25 +47,6 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv8guHW3zw8EESTOipg1JqzyN5oA6BsYM&callback=initMap&libraries=&v=weekly"
       async
     ></script>
-
-
-
-    <form id="update-form" data-id="insert spiceblend ID" autocomplete="off">
-      <label for="title">New Title: </label>
-      <input type="text" name="title" id="spiceblend-title" />
-      <input type="submit" value="Update" />  
-    </form>
-
-    <hr />
-
-    <!-- New Ingredient Form -->
-    <form id="ingredient-form" data-id="insert spiceblend ID" autocomplete="off">
-      <h4>Add Location to Favorites</h4>
-      <label for="name">Ingredient Name: </label>
-      <input type="text" name="name" id="ingredient-name" />
-      <input type="submit" value="Add Ingredient" />
-    </form>
-
 
   </body>
 </html>
