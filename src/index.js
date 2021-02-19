@@ -18,7 +18,7 @@ const detailedName = document.querySelector(".detail")
 const detailedDetails = document.querySelector(".details")
 const detailedIcon = document.querySelector(".detailed-weather-icon")
 const detailedTemp = document.querySelector(".detail-temp")
-const nameContainer = document.querySelector(".name-container")
+const nameContainer = document.querySelector("h5")
 
 const dayOne = document.querySelector(".day-one")
 const dayOneIcon = document.querySelector(".day-one-weather-icon")
@@ -59,16 +59,16 @@ const userID = 1
 
 // Seed more data for "John"
 
-const newName = prompt("Welcome, what is your name?", "John")
+const name = prompt("Welcome, what is your name?", "John")
 
-const findNewName = _ => {
+const findname = _ => {
     fetch(usersData)
         .then(res => res.json())
-        .then(userArr => userArr.find(user => user.name === newName))
+        .then(userArr => userArr.find(user => user.name === name))
         .then(user => getUser(user.id))
 }
 
-findNewName()
+findname()
 
 const getUser = id => {
     fetch(usersData + `/${id}`)
@@ -79,7 +79,7 @@ const getUser = id => {
             })
         })
         form.dataset.id = id
-        displayName()
+        displayName(name)
 }
 
 // getUser()
@@ -148,6 +148,22 @@ const fetchWeatherData = (zip, id) => {
     fetch(forecastUrl + `${zip}` + ",US&units=imperial&" + key)
         .then(res => res.json())
         .then(data => createForecastDetails(data))
+}
+
+const updateName = event => {
+    let newName = prompt("Please type in your new name")
+    let id = form.dataset.id
+    
+    fetch(`${usersData}/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-type": "application/json",
+    },
+        body: JSON.stringify({name: newName})
+    })
+
+    displayName(newName)
+
 }
 
 //display functions
@@ -283,12 +299,12 @@ const createNewFavorite = (weather, id) => {
     deleteDiv.addEventListener('click', deleteLocation)
 }
 
-const displayName = _ => {
-    nameContainer.innerText = `Welcome, ${newName}!`
+const displayName = name => {
+    nameContainer.innerText = `Welcome, ${name}!`
 }
 
 //event listeners
 form.addEventListener("submit", getLocation)
 favoriteDiv.addEventListener("click", showWeather)
-
+nameContainer.addEventListener("click", updateName)
 
