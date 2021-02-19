@@ -12,62 +12,64 @@
 
   <body>
     <header>
-      <h3>Weather App</h3>
+      <h3>The Weather App</h3>
     </header>
+        <!---Location Form-->
+        <form id="location-form" data-id="insert user ID">
+            <label for="location">Find the weather</label>
+            <input type="text" id="location-input" name="location" placeholder="Enter zipcode" required>
+            <button type="submit">Search</button>
+        </form>
 
     <div class="weather-wrapper">
 
     </div>
 
-    <hr />
     <!-- Home Location Weather / Radar -->
     <h4>Weather Details</h4>
       <div class="detailed-weather-wrapper"> 
         <div class="detailed-weather-card">
-        <h1 class="detail"></h1>
+          <div class="detailed-weather-icon"></div>
+          <h1 class="detail"></h1>
         <h2 class="details"></h2>
+        <h3 class="detail-temp"></h3>
         <!-- <img src="https://maps.googleapis.com/maps/api/js?key=appid=a676cbe359f328eaead7426bb2fac895&callback=initMap"> -->
         </div>
+        <div class="detailed-forecast">
+          <div class="day-one">
+            <div class="day-one-weather-icon"></div>
+            <h1 class="day-one-detail"></h1>
+            <h2 class="day-one-date"></h2>
+          </div>
+          <div class="day-two">
+            <div class="day-two-weather-icon"></div>
+            <h1 class="day-two-detail"></h1>
+            <h2 class="day-two-date"></h2>
+          </div>
+          <div class="day-three">
+            <div class="day-three-weather-icon"></div>
+            <h1 class="day-three-detail"></h1>
+            <h2 class="day-three-date"></h2>
+          </div>
+          <div class="day-four">
+            <div class="day-four-weather-icon"></div>
+            <h1 class="day-four-detail"></h1>
+            <h2 class="day-four-date"></h2>
+          </div>
+          <div class="day-five">
+            <div class="day-five-weather-icon"></div>
+            <h1 class="day-five-detail"></h1>
+            <h2 class="day-five-date"></h2>
+          </div>
+        </div>
       </div>
+      <div class="detailed-weather-wrapper-2">
+      <div class="detailed-radar">
+        <iframe width="585" height="400" src="https://embed.windy.com/embed2.html?lat=40.781&lon=-73.950&detailLat=40.781&detailLon=-73.950&width=650&height=450&zoom=5&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" frameborder="0"></iframe>
+        <!-- <img class="radar-image" style="height:250px;width:400px;" src='https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_composite?&centerlat=45.2538&centerlon=-69.4455&radius=130&type=N0R&frame=0&num=6&delay=60&width=640&height=480&newmaps=1&r=1210555939&smooth=1&rainsnow=1&lat=45.2538&lon=-69.4455&severe=1&showstorms=15&brand=mobile&showids=0&noclutter=1'> -->
+      </div>
+    </div>
     
-    <hr />
-    <!---Location Form-->
-    <form id="location-form" data-id="insert user ID">
-      <h4>Select Location</h4>
-        <label for="location">Location:</label>
-        <input type="text" id="location-input" name="location" placeholder="Enter zipcode">
-        <input type="submit">
-    </form>
-
-    <hr />
-
-    <div id="map"></div>
-
-    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv8guHW3zw8EESTOipg1JqzyN5oA6BsYM&callback=initMap&libraries=&v=weekly"
-      async
-    ></script>
-
-
-
-    <form id="update-form" data-id="insert spiceblend ID" autocomplete="off">
-      <label for="title">New Title: </label>
-      <input type="text" name="title" id="spiceblend-title" />
-      <input type="submit" value="Update" />  
-    </form>
-
-    <hr />
-
-    <!-- New Ingredient Form -->
-    <form id="ingredient-form" data-id="insert spiceblend ID" autocomplete="off">
-      <h4>Add Location to Favorites</h4>
-      <label for="name">Ingredient Name: </label>
-      <input type="text" name="name" id="ingredient-name" />
-      <input type="submit" value="Add Ingredient" />
-    </form>
-
-
   </body>
 </html>
 
