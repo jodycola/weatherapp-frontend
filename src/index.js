@@ -18,6 +18,7 @@ const detailedName = document.querySelector(".detail")
 const detailedDetails = document.querySelector(".details")
 const detailedIcon = document.querySelector(".detailed-weather-icon")
 const detailedTemp = document.querySelector(".detail-temp")
+const nameContainer = document.querySelector(".name-container")
 
 const dayOne = document.querySelector(".day-one")
 const dayOneIcon = document.querySelector(".day-one-weather-icon")
@@ -58,18 +59,30 @@ const userID = 1
 
 // Seed more data for "John"
 
-const getUser = _ => {
-    fetch(usersData + '/1')
+const newName = prompt("Welcome, what is your name?", "John")
+
+const findNewName = _ => {
+    fetch(usersData)
+        .then(res => res.json())
+        .then(userArr => userArr.find(user => user.name === newName))
+        .then(user => getUser(user.id))
+}
+
+findNewName()
+
+const getUser = id => {
+    fetch(usersData + `/${id}`)
         .then(res => res.json())
         .then(dataArr => {
             dataArr.favorites.forEach(favorite => {
                 getWeatherForLocation(favorite.zip, favorite.id)
             })
         })
-        form.dataset.id = userID
+        form.dataset.id = id
+        displayName()
 }
 
-getUser()
+// getUser()
 
 const getLocation = event => {
     event.preventDefault()
@@ -270,22 +283,12 @@ const createNewFavorite = (weather, id) => {
     deleteDiv.addEventListener('click', deleteLocation)
 }
 
+const displayName = _ => {
+    nameContainer.innerText = `Welcome, ${newName}!`
+}
+
 //event listeners
 form.addEventListener("submit", getLocation)
 favoriteDiv.addEventListener("click", showWeather)
-
-// testiing google maps
-const googleKey = 'AIzaSyDbomeIPzvVSlX_5YR9hSPOofDQpHUvcZE'
-
-let map;
-
-const initMap = _ => {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644},
-    zoom: 8,
-  });
-}
-
-initMap()
 
 
