@@ -155,3 +155,6 @@ const initMap = _ => {
 }
 
 initMap()
+
+'http://api.openweathermap.org/data/2.5/forecast?zip=10128,US&appid=a676cbe359f328eaead7426bb2fac895'
+'api.openweathermap.org/data/2.5/forecast?zip=10128,US&appid=a676cbe359f328eaead7426bb2fac895'
